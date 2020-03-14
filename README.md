@@ -14,7 +14,7 @@ Part of this work can be found in
   
 ### Overview ###
 
-Super-resolution (SR) constructs a high-resolution (HR) image from a low-resolution (LR) image. Convolutional neural networks (CNNs) are currently the state-of-the-art technique for SR, but they fail to guarantee consistency between the LR and the HR images. Our method adds a post-processing step, based on solving an optimization problem (TV-TV minimization), that enforces consistency.
+Super-resolution (SR) constructs a high-resolution (HR) image from a low-resolution (LR) image. Convolutional neural networks (CNNs) are currently the state-of-the-art technique for SR, but they fail to guarantee consistency between the LR and the HR images. Our method adds a post-processing step, which solves an optimization problem called TV-TV minimization, that enforces consistency.
 
 ### Proposed Method ###
 
