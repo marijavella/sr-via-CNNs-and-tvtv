@@ -3,7 +3,7 @@
 % ---------------------------------------------------------------------------
 clear
 main('../images/SampleImages/SampleImages_SRCNN', ...
-  '../images/SampleImages/SampleImages_HR', 2, 'ResultsTest.mat', 'A_FORWARD', 'A_box.m', 'A_TRANSPOSE', 'AT_box.m')
+  '../images/SampleImages/SampleImages_HR', 2, 'ResultsTest.mat')
 
 % --------------------------------------------------------------------------------------------
 % Create a folder 'Test_Sets_Side' and download the images from the Google drive link provided
