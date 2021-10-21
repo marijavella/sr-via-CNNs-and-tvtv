@@ -2,9 +2,9 @@
 
 Matlab code to reproduce the experiments in
 
-**[Robust Single-Image Super-Resolution via CNNs and TV-TV Minimization](https://arxiv.org/abs/2004.00843)**<br/>
+**[Robust Single-Image Super-Resolution via CNNs and TV-TV Minimization](https://ieeexplore.ieee.org/document/9535267)**<br/>
   Marija Vella, João F. C. Mota<br/>
-  submitted, 2020
+  IEEE Transactions on Image Processing, 2021
 
 Part of this work can be found in 
 
