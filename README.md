@@ -54,34 +54,26 @@ For a fair comparison, most experiments were conducted assuming a bicubically in
 
  | Method | Citation|
  |---- | ---|
- |**Kim**|K. I. Kim and Y. Kwon, “Single-Image Super-Resolution Using Sparse Regression and Natural Image Prior”, IEEE Trans. Pattern Analysis and Machine Intelligence, vol. 32, no. 6, pp. 1127-1133, 2010.|
  |**SRCNN**| C. Dong, C. C. Loy, K. He, X. Tang "Learning a Deep Convolutional Network for Image Super-Resolution, ECCV 2014. Code available [here](http://mmlab.ie.cuhk.edu.hk/projects/SRCNN.html).|
- |**SelfExSR**| J. Huang, A. Singh and N. Ahuja, "Single Image Super-Resolution from Transformed Self-Exemplars", CVPR 2015. Code available [here](https://github.com/jbhuang0604/SelfExSR).|
  |**FSRCNN**| C. Dong, C. C. Loy and X. Tang, "Accelerating the Super-Resolution Convolutional Neural Network", ECCV 2016. Code available [here](http://mmlab.ie.cuhk.edu.hk/projects/FSRCNN.html).|
  |**DRCN**| J. Kim, J. K. Lee and K. M. Lee, "Deeply-Recursive Convolutional Network for Image Super-Resolution", CVPR 2016. Code available [here](https://cv.snu.ac.kr/research/DRCN/).| 
  |**VDSR**| J. Kim, J. K. Lee and K. M. Lee, "Accurate Image Super-Resolution Using Very Deep Convolutional Networks", CVPR 2016. Code available [here](https://cv.snu.ac.kr/research/VDSR/).| 
  |**LapSRN**| W. Lai, J. Huang, N. Ahuja and M. Yang, "Fast and Accurate Image Super-Resolution with Deep Laplacian Pyramid Networks", CVPR 2017. Code available [here](http://vllab.ucmerced.edu/wlai24/LapSRN/).| 
  |**SRMD**| K. Zhang, W. Zuo and L. Zhang, "Learning a Single Convolutional Super-Resolution Network for Multiple Degradations", CVPR 2018. Code available [here](https://github.com/cszn/SRMD).| 
- |**IRCNN**| K. Zhang, W. Zuo and L. Zhang, "Learning Deep CNN Denoiser Prior for Image Restoration", CVPR 2017. Code available [here](https://github.com/cszn/IRCNN).| 
+ |**IRCNN**| K. Zhang, W. Zuo, G. Shuhang and L. Zhang, "Learning Deep CNN Denoiser Prior for Image Restoration", CVPR 2017. Code available [here](https://github.com/cszn/IRCNN).| 
+ |**EDSR**| B. Lim, S. Son, H. Kim, S. Nah, K. M. Lee, "Enhanced Deep Residual Networks for Single Image Super-Resolution", CVPR 2017. Code available [here](https://github.com/sanghyun-son/EDSR-PyTorch).| 
+ |**RCAN**|  Y. Zhang, K. Li, K. Li, L. Wang, B. Zhong and Y. Fu, "Image Super-Resolution Using Very Deep Residual Channel Attention Networks", ECCV 2018. Code available [here](https://github.com/yulunzhang/RCAN).| 
  |**ESRGAN**| X. Wang, K. Yu, S. Wu, J.Gu, Y. Liu, C.Dong, Y. Qiao and C .C. Loy, "ESRGAN: Enhanced Super-Resolution Generative Adversarial Networks", ECCVW 2018. Code available [here](https://github.com/xinntao/ESRGAN).| 
  
-For Kim, SRCNN and SelfExSR, we used output images available [here](https://github.com/jbhuang0604/SelfExSR). The images used as side information w, are also available from the following links:
-
-* [Kim](https://drive.google.com/drive/folders/1KzGYvMjY3z8B6ORpuoAFmXs2qiNwgYTq?usp=sharing)
+For SRCNN and SelfExSR, we used output images available [here](https://github.com/jbhuang0604/SelfExSR). Some of the images used as side information w, are also available from the following links:
 
 * [SRCNN](https://drive.google.com/drive/folders/1L26_ON1gZyM_0z_u0nool7cp-CBKfSZe?usp=sharing)
 
-* [SelfExSR](https://drive.google.com/drive/folders/1YINuqjTBBwGiyPLl7KFscPmXrZAvtS7E?usp=sharing)
-
 * [DRCN](https://drive.google.com/drive/folders/1e0X5qLtgzVHmVFvY_8cr6nptZPLWnsxu?usp=sharing)
-
-* [VDSR](https://drive.google.com/drive/folders/1-C9wHrjSWH_mT-VkuTGnleEKLyZeLhoU?usp=sharing)
 
 * [LapSRN](https://drive.google.com/drive/folders/1hZx6UXoTYV3E2VYQgVxhcccLWmkgCso-?usp=sharing)
 
 * [SRMD](https://drive.google.com/drive/folders/1yA1hn7RW0kLMUW_cnjjp0Jsp-Hr0S0tk?usp=sharing)
-
-* [IRCNN](https://drive.google.com/drive/folders/1lONYPPmgHiUh0kfTO1ZahfipDoHjSt7u?usp=sharing)
 
 * [ESRGAN](https://drive.google.com/drive/folders/1AJsDHdrW3mNHF0PEt4mlZPLITkoGTd5G?usp=sharing)
 

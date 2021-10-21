@@ -1,10 +1,8 @@
+
 function [] = main(path_side_info, path_groundtruth, ...
-        scaling_factor, filename_results,  ...
+        scaling_factor, in_type, filename_results,  ...
         varargin)
 
-% function [] = main(path_side_info, path_groundtruth, ...
-%                    scaling_factor, filename_results, varargin)
-%
 % Loops through the images in the folders 'path_side_info' and
 % 'path_groundtruth', which should exist in equal numbers and 
 % have the same order in the corresponding folders, and applies 
@@ -148,7 +146,7 @@ else
             case 'A_FORWARD'
                 A_h = varargin{i+1};
             case 'A_TRANSPOSE'
-                AT_h = varargin{i+1};
+                AT_h = varargin{i+1};         
             otherwise
                 error(['Unrecognized option: ''' varargin{i} '''']);
         end
@@ -187,69 +185,105 @@ ssim_cnn  = zeros(1, num_images);
 
  disp(['-----Super-Resolution-----', 'x', num2str(scaling_factor),'-----']);
 
-for j = 1 : num_images
-    
-    % Image w
-    im_w.out = DNNs(j).data;
 
-    % If it has more than one channel (assumed RGB),
-    % convert image to YCbCr color space and select Y channel 
-    if size(im_w.out,3) > 1
+parfor j = 1:1:num_images    
+    % Image w
+    im_gt = struct()
+    im_w = struct()
+    im_HR = struct()
+    im_w.out = DNNs(j).data;
+   
+    % if the original network is trained on an RGB image, no pre-processing
+    % is done
+   
+
+    if in_type == 'RGB' 
+        w = im_w.out;         
+        x = HR(j).data; 
+      if size(im_w.out,3) > 1
+        im_gt.out = im2double(HR(j).data(:,:,1));
+        x =  im2double(reshape(x,[],3));
+        w =  im2double(reshape(w, [], 3));
+      end
+      if size(im_w.out,3) == 1
+         w = im_w.out;
+         x = HR(j).data;
+         im_gt.out = (HR(j).data);
+         x =  im2double(x(:));
+         w =  im2double(w(:));
+      end
+    end
+         
+     if in_type == 'Y' 
+      if  size(im_w.out,3) > 1
         im1 = rgb2ycbcr(im_w.out);
         im_w.out = im1(:, :, 1);
-    end
-
-    % Highres image (keep all channels)
-    im_HR.out = HR(j).data;
-
-    % Create ground truth image by keeping only Y channel
-    if size(im_HR.out,3) >1
+        im_HR.out = HR(j).data;
         im1 = rgb2ycbcr(im_HR.out);
         im_gt.out = im1(:, :, 1);
+        
+       end
+
+    if size(HR(j).data,3) == 1 
+        im_gt.out = HR(j).data;
+    end
+        w = im2double(im_w.out(:)); % normalizing the intensity values
+        x = im2double(im_gt.out(:)); % normalizing the intensity values
     end
 
     % Dimensions of image
-    [M, N] = size(im_gt.out); 
+    [M, N, channel] = size(im_w.out); 
+    if in_type == 'RGB' & size(im_w.out,3) > 1
+        channel = 3
+    else
+       channel = 1
+    end
+        
     n = M*N;
 
     % -------------------------------------------------------------
-    % Vectorize images and rescale entries to [0, 1]
-
-    % w
-    w = im2double(im_w.out(:)); % normalizing the intensity values
-
-    % x
-    x = im2double(im_gt.out(:)); % normalizing the intensity values
-
-    % ----------------------------------------------
-
-    % Obtain the LR image b by sampling x
-    b = A_h(x,scaling_factor,M,N); 
 
     % ----------------------------------------------
     %% Post-processing step using TVTV Solver
-    
-    if GPU
-        [x_ADMM, k_ADMM] = TVTV_Solver_GPU(M, N, b, w, beta, A_h, AT_h, scaling_factor);
-    else
-        [x_ADMM, k_ADMM] = TVTV_Solver_CPU(M, N, b, w, beta, A_h, AT_h, scaling_factor);
+     X_ADMM = zeros(n,channel);
+    tic
+    for i = 1:channel
+         % Obtain the LR image b by sampling x
+        b = A_h(x(:,i),scaling_factor,M,N); 
+        if GPU 
+            [x_ADMM, k_ADMM] = TVTV_Solver_GPU(M, N, b, w(:,i), beta, A_h, AT_h, scaling_factor);
+            X_ADMM(:,i) = x_ADMM;
+        else
+            [x_ADMM, k_ADMM] = TVTV_Solver_CPU(M, N, b, w(:,i), beta, A_h, AT_h, scaling_factor);
+            X_ADMM(:,i) = x_ADMM;
+        end
+        
     end
-
+    toc
     fprintf('Image %i processed \n',j)
-    % ----------------------------------------------
+    % ----------------------------------------------------------------------------------------------------
+   
     
-    % ----------------------------------------------
+    % ----------------------------------------------------------------------------------------------------
     %% Reshape from vector to matrix and rescale entries to [1,255]
-    x_hat = (reshape(x_ADMM,M,N)); 
+    x_hat = (reshape(X_ADMM,M,N, channel)); 
     x_hat = uint8(x_hat*255); 
-    % ----------------------------------------------
+    
+    % ----------------------------------------------------------------------------------------------------
 
     if SHOW_IMAGES
         plotimages(j,im_HR.out, im_gt.out,im_w.out, x_hat, scaling_factor)
     end
     
+    if in_type == 'RGB' & size(im_w.out,3) > 1
+        x_hat = rgb2ycbcr(x_hat);
+        x_hat = x_hat(:,:,1);
+        im1 = rgb2ycbcr(HR(j).data);
+        im_gt.out =im1(:, :, 1);
+    end
+    
     %% Compute the PSNR and SSIM values 
-    [psnr_tvtv(j), ssim_tvtv(j)] = compute_diff(x_hat,         im_gt.out, scaling_factor);
+    [psnr_tvtv(j), ssim_tvtv(j)] = compute_diff(x_hat, im_gt.out, scaling_factor);
     [psnr_cnn(j), ssim_cnn(j)]   = compute_diff(im_w.out, im_gt.out, scaling_factor);
 
     % Print results
@@ -262,10 +296,10 @@ end
 
 % ======================================================
 % Compute the mean over all images of PSNR and SSIM
-psnr_tvtv_mean = mean(psnr_tvtv);
-psnr_cnn_mean  = mean(psnr_cnn);
-ssim_tvtv_mean = mean(ssim_tvtv);
-ssim_cnn_mean  = mean(ssim_cnn);
+psnr_tvtv_mean = mean(psnr_tvtv)
+psnr_cnn_mean  = mean(psnr_cnn)
+ssim_tvtv_mean = mean(ssim_tvtv)
+ssim_cnn_mean  = mean(ssim_cnn)
 
 %% Storing the results for each image and saving the results in a matrix 
 save(filename_results, 'psnr_tvtv', 'psnr_cnn', 'ssim_tvtv', 'ssim_cnn',  ...

@@ -76,8 +76,8 @@ end
 
 % =========================================================================
 % Parameters
-MAX_ITER = 1700;
-rho  = 0.5;
+MAX_ITER = 1900;
+rho  = 0.8;
 tau_rho  = 10;
 mu_rho  = 2;
 
@@ -233,7 +233,7 @@ for k = 1 : MAX_ITER
     v_aux = ifft(h.*fft(g));
   
     v_bar = v_aux;
-    
+    v = v_bar;
     % *****************************************************************************************
     % Update dual variable
     
@@ -245,8 +245,8 @@ for k = 1 : MAX_ITER
     lambda = lambda + rho*r_prim(1:2*n);
     mu = mu + rho*r_prim(2*n+1:3*n);
     
-    s_dual(1:2*n) =  -rho*(D(v_bar  + v_bar_prev)); % dual residual
-    s_dual(2*n+1:3*n) = -rho*(v_bar + v_bar_prev);
+    s_dual(1:2*n) = rho*(D(-v_bar  + v_bar_prev)); % dual residual
+    s_dual(2*n+1:3*n) = rho*(-v_bar + v_bar_prev);
     % *********************************************************************
     
     % *********************************************************************

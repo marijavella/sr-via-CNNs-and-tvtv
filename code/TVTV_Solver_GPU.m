@@ -76,8 +76,10 @@ end
 
 % =========================================================================
 % Parameters
+
 MAX_ITER = 1700;
-rho      = 0.5;
+%rho      = 0.5;
+rho = 0.1;
 tau_rho  = 10;
 mu_rho   = 2;
 
@@ -238,7 +240,7 @@ for k = 1 : MAX_ITER
     v_aux = ifft(h.*fft(g));
 
     v_bar = v_aux;
-    
+    v  = v_bar;
     % *********************************************************************
     % Update dual variable
     
@@ -249,7 +251,7 @@ for k = 1 : MAX_ITER
     lambda = lambda + rho*r_prim(1:2*n);
     mu = mu + rho*r_prim(2*n+1:3*n);
     
-    s_dual = -rho*[D(gpuArray(v_bar + v_bar_prev)); (v_bar + v_bar_prev) ]; % dual residual
+    s_dual = rho*[D(gpuArray(-v_bar + v_bar_prev)); (-v_bar + v_bar_prev) ]; % dual residual
 
     % *********************************************************************
     
@@ -299,7 +301,8 @@ end
         % A2 is a function handler
         
         MAX_ITER = 1e6;
-        TOL      = 10e-7;
+        TOL      = 10e-8;
+       
         
         r = b - A2(x2, A, AT, scaling_factor, M, N);
         f = r;
